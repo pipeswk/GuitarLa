@@ -17,10 +17,6 @@
     }
 }
 
-.barra img:hover {
-    cursor: pointer;
-}
-
 .navegacion {
     margin-top: 5rem;
     display: flex;
