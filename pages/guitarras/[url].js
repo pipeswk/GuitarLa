@@ -1,12 +1,31 @@
 import Image from 'next/image'
 import Layout from '../../Components/Layout'
 import styles from '../../styles/Producto.module.css'
+import { useState } from 'react'
 
-const Producto = ( { resultado } ) => {
+const Producto = ( { resultado, agregarCarrito } ) => {
+
+    const [cantidad, setCantidad] = useState(1)
 
     const { imagen, nombre, descripcion, precio, url, id } = resultado[0]
 
     const moneda = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(precio)
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if(cantidad < 1) {
+            alert('Cantidad de productos invalida')
+            return;
+        }
+        const guitarraSeleccionada = {
+            id,
+            imagen: imagen.url,
+            nombre,
+            precio,
+            cantidad
+        }
+        agregarCarrito(guitarraSeleccionada)
+    }
 
   return (
     <Layout pagina={nombre} >
@@ -17,10 +36,16 @@ const Producto = ( { resultado } ) => {
                 <p className={styles.descripcion}>{descripcion}</p>
                 <p className={styles.precio}>{moneda}</p>
 
-                <form className={styles.formulario}>
+                <form
+                    className={styles.formulario}
+                    onSubmit={handleSubmit}
+                >
                     <label>Cantidad: </label>
-                    <select>
-                        <option value=''>--Seleccionar--</option>
+                    <select
+                        value={cantidad}
+                        onChange={e => setCantidad(parseInt(e.target.value))}
+                    >
+                        <option value='0'>--Seleccionar--</option>
                         <option value='1'>1</option>
                         <option value='2'>2</option>
                         <option value='3'>3</option>
